@@ -1,0 +1,22 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="str.decode" />
+          <option value="handlers.admins.FSMAdmin.proxy" />
+          <option value="handlers.admins.FSMAdmin.finish" />
+          <option value="aiogram.dispatcher.filters.state.State.proxy" />
+          <option value="handlers.categories.NameSpace.finish" />
+          <option value="handlers.categories.NameSpace.proxy" />
+          <option value="aiogram.dispatcher.filters.state.State.finish" />
+          <option value="handlers.clients.Work.proxy" />
+          <option value="handlers.clients.Work.finish" />
+          <option value="aiogram.types.message.Message.message" />
+          <option value="telebot.TeleBot" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
