@@ -81,10 +81,7 @@ def runs(array: list):
 
 
 def longest_runs(array):
-    new_array = copy.deepcopy(array)
-    bin_data = ''
-    for i in tqdm(new_array):
-        bin_data += str(i)
+    bin_data = copy.deepcopy(array)
 
     if len(bin_data) < 128:
         print("\t", "Not enough data to run test!")
