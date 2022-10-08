@@ -281,7 +281,7 @@ def matrix_rank(bin_data: str, q=32):
 
     if num_m > 0:
         max_ranks = [0, 0, 0]
-        for im in range(num_m):
+        for im in trange(num_m):
             block_data = bin_data[block_start:block_end]
             block = numpy.zeros(len(block_data))
             for i in range(len(block_data)):
@@ -332,7 +332,7 @@ def spectral_test(bin_data: str):
     """
     n = len(bin_data)
     plus_minus_one = []
-    for char in bin_data:
+    for char in tqdm(bin_data):
         if char == '0':
             plus_minus_one.append(-1)
         elif char == '1':
@@ -374,7 +374,7 @@ def non_overlapping_template_test(bin_data: str, template="000000001", num_block
     block_size = math.floor(n / num_blocks)
     pattern_counts = numpy.zeros(num_blocks)
     # For each block in the data
-    for i in range(num_blocks):
+    for i in trange(num_blocks):
         block_start = i * block_size
         block_end = block_start + block_size
         block_data = bin_data[block_start:block_end]
@@ -392,7 +392,7 @@ def non_overlapping_template_test(bin_data: str, template="000000001", num_block
     var = block_size * ((1 / pow(2, pattern_size)) - (((2 * pattern_size) - 1) / (pow(2, pattern_size * 2))))
     # Calculate the Chi Squared statistic for these pattern matches
     chi_squared = 0
-    for i in range(num_blocks):
+    for i in trange(num_blocks):
         chi_squared += pow(pattern_counts[i] - mean, 2.0) / var
     # Calculate and return the p value statistic
     result = spc.gammaincc(num_blocks / 2, chi_squared / 2)
@@ -435,7 +435,7 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
     piks.append(1.0 - diff)
 
     pattern_counts = numpy.zeros(6)
-    for i in range(num_blocks):
+    for i in trange(num_blocks):
         block_start = i * block_size
         block_end = block_start + block_size
         block_data = bin_data[block_start:block_end]
@@ -453,7 +453,7 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
             pattern_counts[5] += 1
 
     chi_squared = 0.0
-    for i in range(len(pattern_counts)):
+    for i in trange(len(pattern_counts)):
         chi_squared += pow(pattern_counts[i] - num_blocks * piks[i], 2.0) / (num_blocks * piks[i])
     result = spc.gammaincc(5.0 / 2.0, chi_squared / 2.0)
     if result >= 0.01:
@@ -529,7 +529,7 @@ def universal_statistical_test(binary_data: str):
         # last occurrence of the same L-bit block (i.e., i – Tj). Replace the value in the table with the
         # location of the current block (i.e., Tj= i). Add the calculated distance between re-occurrences of
         # the same L-bit block to an accumulating log2 sum of all the differences detected in the K blocks
-        for i in range(num_blocks):
+        for i in trange(num_blocks):
             block_start = i * pattern_size
             block_end = block_start + pattern_size
             block_data = binary_data[block_start: block_end]
@@ -576,7 +576,7 @@ def berlekamp_massey_algorithm(block_data):
     c[0], b[0] = 1, 1
     l, m, i = 0, -1, 0
     int_data = [int(el) for el in block_data]
-    while i < n:
+    while tqdm(i < n):
         v = int_data[(i - l):i]
         v = v[::-1]
         cc = c[1:l + 1]
@@ -618,7 +618,7 @@ def linear_complexity(bin_data, block_size=500):
         block_end = block_size
         block_start = 0
         blocks = []
-        for i in range(num_blocks):
+        for i in trange(num_blocks):
             blocks.append(bin_data[block_start:block_end])
             block_start += block_size
             block_end += block_size
@@ -670,7 +670,7 @@ def serial(bin_data, template_length=16):
     vobs_two = numpy.zeros(int(max_pattern[0:template_length - 1:], 2) + 1)
     vobs_thr = numpy.zeros(int(max_pattern[0:template_length - 2:], 2) + 1)
 
-    for i in range(n):
+    for i in trange(n):
         # Work out what pattern is observed
         vobs_one[int(bin_data[i:i + template_length:], 2)] += 1
         vobs_two[int(bin_data[i:i + template_length - 1:], 2)] += 1
@@ -718,7 +718,7 @@ def approximate_entropy(bin_data: str, pattern_length=10):
     vobs_one = numpy.zeros(int(max_pattern[0:pattern_length:], 2) + 1)
     vobs_two = numpy.zeros(int(max_pattern[0:pattern_length + 1:], 2) + 1)
 
-    for i in range(n):
+    for i in trange(n):
         # Work out what pattern is observed
         vobs_one[int(bin_data[i:i + pattern_length:], 2)] += 1
         vobs_two[int(bin_data[i:i + pattern_length + 1:], 2)] += 1
@@ -761,7 +761,7 @@ def cumulative_sums(bin_data: str, method="forward"):
         bin_data = bin_data[::-1]
 
     ix = 0
-    for char in bin_data:
+    for char in tqdm(bin_data):
         sub = 1
         if char == '0':
             sub = -1
@@ -777,14 +777,14 @@ def cumulative_sums(bin_data: str, method="forward"):
     start = int(numpy.floor(0.25 * numpy.floor(-n / abs_max) + 1))
     end = int(numpy.floor(0.25 * numpy.floor(n / abs_max) - 1))
     terms_one = []
-    for k in range(start, end + 1):
+    for k in trange(start, end + 1):
         sub = sst.norm.cdf((4 * k - 1) * abs_max / numpy.sqrt(n))
         terms_one.append(sst.norm.cdf((4 * k + 1) * abs_max / numpy.sqrt(n)) - sub)
 
     start = int(numpy.floor(0.25 * numpy.floor(-n / abs_max - 3)))
     end = int(numpy.floor(0.25 * numpy.floor(n / abs_max) - 1))
     terms_two = []
-    for k in range(start, end + 1):
+    for k in trange(start, end + 1):
         sub = sst.norm.cdf((4 * k + 1) * abs_max / numpy.sqrt(n))
         terms_two.append(sst.norm.cdf((4 * k + 3) * abs_max / numpy.sqrt(n)) - sub)
 
@@ -825,7 +825,7 @@ def random_excursions(bin_data):
     """
     # Turn all the binary digits into +1 or -1
     int_data = numpy.zeros(len(bin_data))
-    for i in range(len(bin_data)):
+    for i in trange(len(bin_data)):
         if bin_data[i] == '0':
             int_data[i] = -1.0
         else:
@@ -893,7 +893,7 @@ def random_excursions_variant(bin_data):
     :return: the P-value
     """
     int_data = numpy.zeros(len(bin_data))
-    for i in range(len(bin_data)):
+    for i in trange(len(bin_data)):
         int_data[i] = int(bin_data[i])
     sum_int = (2 * int_data) - numpy.ones(len(int_data))
     cumulative_sum = numpy.cumsum(sum_int)
