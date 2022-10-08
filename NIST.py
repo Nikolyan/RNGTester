@@ -8,7 +8,6 @@ from numpy import zeros
 import numpy.fft as sff
 
 import scipy.stats as sst
-import scipy.special as sc
 import scipy.special as spc
 from scipy.special import erfc
 
@@ -44,7 +43,7 @@ def frequency_block_test(array: list, m: int):
         x2 += ((a0 / m) - (1 / 2)) ** 2
         buf_array.clear()
 
-    result = 1 - sc.gammainc((N / 2), ((x2 * 4 * m) / 2))
+    result = 1 - spc.gammainc((N / 2), ((x2 * 4 * m) / 2))
     if result >= 0.01:
         return f'------------ \nFrequency Block Test \nSuccess P-value = {str(result)} \n------------'
     else:
@@ -133,7 +132,7 @@ def longest_runs(array):
     chi_squared = 0
     for i in range(len(frequencies)):
         chi_squared += (pow(frequencies[i] - (num_blocks * pik_values[i]), 2.0)) / (num_blocks * pik_values[i])
-    result = sc.gammaincc(float(k / 2), float(chi_squared / 2))
+    result = spc.gammaincc(float(k / 2), float(chi_squared / 2))
 
     if result >= 0.01:
         return f'------------ \nLongest Runs Test \nSuccess P-value = {str(result)} \n------------'
