@@ -55,15 +55,6 @@ def runs(array: list):
     new_array = copy.deepcopy(array)
     n = len(new_array)
     pi = sum(new_array) / n
-    print(n)
-    print(2 / n ** (1 / 2))
-    # if abs(pi - 0.5) >= t:
-    #     print('Runs Test can not done, because |p - 0.5| >= t')
-    #     print('pi = ', pi, 't = ', t)
-    #     print('p = 0.000')
-    #     print('------------')
-    #     return 0.000
-    # else:
     obs_array = []
     for j in trange(0, n - 1):
         if new_array[j] == new_array[j + 1]:
