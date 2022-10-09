@@ -1,6 +1,7 @@
 import copy
 from tqdm import tqdm, trange
 import math
+
 from math import floor, log, sqrt
 
 
@@ -567,7 +568,7 @@ def berlekamp_massey_algorithm(block_data):
     c[0], b[0] = 1, 1
     l, m, i = 0, -1, 0
     int_data = [int(el) for el in block_data]
-    while tqdm(i < n):
+    while i < n:
         v = int_data[(i - l):i]
         v = v[::-1]
         cc = c[1:l + 1]
@@ -609,13 +610,13 @@ def linear_complexity(bin_data, block_size=500):
         block_end = block_size
         block_start = 0
         blocks = []
-        for i in trange(num_blocks):
+        for i in range(num_blocks):
             blocks.append(bin_data[block_start:block_end])
             block_start += block_size
             block_end += block_size
 
         complexities = []
-        for block in blocks:
+        for block in tqdm(blocks):
             complexities.append(berlekamp_massey_algorithm(block))
 
         t = ([-1.0 * (((-1) ** block_size) * (chunk - mean) + 2.0 / 9) for chunk in complexities])
@@ -623,7 +624,7 @@ def linear_complexity(bin_data, block_size=500):
         im = ([((vg[ii] - num_blocks * piks[ii]) ** 2) / (num_blocks * piks[ii]) for ii in range(7)])
 
         chi_squared = 0.0
-        for i in range(len(piks)):
+        for i in trange(len(piks)):
             chi_squared += im[i]
         result = spc.gammaincc(dof / 2.0, chi_squared / 2.0)
         if result >= 0.01:
