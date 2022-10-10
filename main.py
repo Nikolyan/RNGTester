@@ -3,7 +3,7 @@ import NIST
 
 
 
-ar = creat_array(r'dt.bin', 0)
+ar = creat_array('dt.bin', 0)
 print(NIST.frequency_monobit_test(ar))
 print(NIST.frequency_block_test(ar, 128))
 print(NIST.runs(ar))
