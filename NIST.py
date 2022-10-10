@@ -55,15 +55,7 @@ def runs(array: list):
     new_array = copy.deepcopy(array)
     n = len(new_array)
     pi = sum(new_array) / n
-    print(n)
-    print(2 / n ** (1 / 2))
-    # if abs(pi - 0.5) >= t:
-    #     print('Runs Test can not done, because |p - 0.5| >= t')
-    #     print('pi = ', pi, 't = ', t)
-    #     print('p = 0.000')
-    #     print('------------')
-    #     return 0.000
-    # else:
+
     obs_array = []
     for j in trange(0, n - 1):
         if new_array[j] == new_array[j + 1]:
@@ -346,9 +338,11 @@ def spectral_test(bin_data: str):
     # Theoretical number of peaks
     count_n0 = 0.95 * (n / 2)
     # Count the number of actual peaks m > T
-    count_n1 = len(numpy.where(modulus < tau)[0])
+    count_n1 = len(numpy.where((modulus[0:len(modulus)] < tau) & (modulus[0:len(modulus)] > 0))[0])
+
     # Calculate d and return the p value statistic
     d = (count_n1 - count_n0) / (numpy.sqrt((n * 0.95 * 0.05) / 4))
+
     result = spc.erfc(abs(d) / numpy.sqrt(2))
     if result >= 0.01:
         return f'------------ \nSpectral Test \nSuccess P-value = {str(result)} \n------------'
@@ -429,7 +423,6 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
     num_blocks = math.floor(n / block_size)
     lambda_val = float(block_size - template_size + 1) / pow(2, template_size)
     eta = lambda_val / 2.0
-
     piks = [get_prob(i, eta) for i in range(5)]
     diff = float(numpy.array(piks).sum())
     piks.append(1.0 - diff)
@@ -451,6 +444,7 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
             pattern_counts[pattern_count] += 1
         else:
             pattern_counts[5] += 1
+
 
     chi_squared = 0.0
     for i in trange(len(pattern_counts)):
@@ -476,6 +470,7 @@ def universal_statistical_test(binary_data: str):
     :return:    (p_value, bool) A tuple which contain the p_value and result of frequency_test(True or False)
     """
     length_of_binary_data = len(binary_data)
+
     pattern_size = 5
     if length_of_binary_data >= 387840:
         pattern_size = 6
@@ -499,6 +494,7 @@ def universal_statistical_test(binary_data: str):
         pattern_size = 15
     if length_of_binary_data >= 1059061760:
         pattern_size = 16
+
 
     if 5 < pattern_size < 16:
         # Create the biggest binary string of length pattern_size
@@ -576,7 +572,7 @@ def berlekamp_massey_algorithm(block_data):
     c[0], b[0] = 1, 1
     l, m, i = 0, -1, 0
     int_data = [int(el) for el in block_data]
-    while tqdm(i < n):
+    while i < n:
         v = int_data[(i - l):i]
         v = v[::-1]
         cc = c[1:l + 1]
@@ -614,17 +610,21 @@ def linear_complexity(bin_data, block_size=500):
     mean = 0.5 * block_size + (1.0 / 36) * (9 + (-1) ** (block_size + 1)) - t2
 
     num_blocks = int(len(bin_data) / block_size)
-    if num_blocks > 1:
+
+    if num_blocks >= 1:
         block_end = block_size
         block_start = 0
         blocks = []
-        for i in trange(num_blocks):
+        for i in range(num_blocks):
+
+
             blocks.append(bin_data[block_start:block_end])
             block_start += block_size
             block_end += block_size
 
         complexities = []
-        for block in blocks:
+        for block in tqdm(blocks):
+
             complexities.append(berlekamp_massey_algorithm(block))
 
         t = ([-1.0 * (((-1) ** block_size) * (chunk - mean) + 2.0 / 9) for chunk in complexities])
@@ -635,6 +635,7 @@ def linear_complexity(bin_data, block_size=500):
         for i in range(len(piks)):
             chi_squared += im[i]
         result = spc.gammaincc(dof / 2.0, chi_squared / 2.0)
+
         if result >= 0.01:
             return f'------------ \nLinear Complexity Test \nSuccess P-value = {str(result)} \n------------'
         else:
