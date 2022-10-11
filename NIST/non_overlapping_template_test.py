@@ -1,7 +1,7 @@
-import math
-from tqdm import trange, tqdm
+from math import log, floor
 import scipy.special as spc
-import numpy
+from numpy import zeros
+from tqdm import trange
 
 def non_overlapping_template_test(bin_data: str, template="000000001", num_blocks=8):
     """
@@ -18,8 +18,8 @@ def non_overlapping_template_test(bin_data: str, template="000000001", num_block
     """
     n = len(bin_data)
     pattern_size = len(template)
-    block_size = math.floor(n / num_blocks)
-    pattern_counts = numpy.zeros(num_blocks)
+    block_size = floor(n / num_blocks)
+    pattern_counts = zeros(num_blocks)
     # For each block in the data
     for i in trange(num_blocks):
         block_start = i * block_size

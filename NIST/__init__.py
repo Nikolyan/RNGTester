@@ -12,3 +12,4 @@ from NIST.serial import serial
 from NIST.approximate_entropy import approximate_entropy
 from NIST.cumulative_sums import cumulative_sums
 from NIST.random_excursions_variant import random_excursions_variant
+__all__ = ["frequency_monobit_test","frequency_block_test","runs","longest_runs","matrix_rank","spectral_test","non_overlapping_template_test","overlapping_template","universal_statistical_test","linear_complexity","serial","approximate_entropy","cumulative_sums", "random_excursions_variant"]

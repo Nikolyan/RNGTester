@@ -1,12 +1,12 @@
-import math
-from tqdm import trange, tqdm
+from math import floor
 import scipy.special as spc
-import numpy
+from numpy import zeros, array, exp
+from tqdm import trange
 
 def get_prob(u, x):
-    out = 1.0 * numpy.exp(-x)
+    out = 1.0 * exp(-x)
     if u != 0:
-        out = 1.0 * x * numpy.exp(2 * -x) * (2 ** -u) * spc.hyp1f1(u + 1, 2, x)
+        out = 1.0 * x * exp(2 * -x) * (2 ** -u) * spc.hyp1f1(u + 1, 2, x)
     return out
 
 
@@ -27,15 +27,14 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
     pattern = ""
     for i in range(template_size):
         pattern += "1"
-    num_blocks = math.floor(n / block_size)
+    num_blocks = floor(n / block_size)
     lambda_val = float(block_size - template_size + 1) / pow(2, template_size)
     eta = lambda_val / 2.0
-
     piks = [get_prob(i, eta) for i in range(5)]
-    diff = float(numpy.array(piks).sum())
+    diff = float(array(piks).sum())
     piks.append(1.0 - diff)
 
-    pattern_counts = numpy.zeros(6)
+    pattern_counts = zeros(6)
     for i in trange(num_blocks):
         block_start = i * block_size
         block_end = block_start + block_size
@@ -52,6 +51,7 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
             pattern_counts[pattern_count] += 1
         else:
             pattern_counts[5] += 1
+
 
     chi_squared = 0.0
     for i in trange(len(pattern_counts)):

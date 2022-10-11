@@ -1,6 +1,7 @@
-import math
 import scipy.special as spc
-import numpy
+from numpy import zeros
+from tqdm import trange
+from math import log
 
 def approximate_entropy(bin_data: str, pattern_length=10):
     """
@@ -24,24 +25,24 @@ def approximate_entropy(bin_data: str, pattern_length=10):
         max_pattern += '1'
 
     # Keep track of each pattern's frequency (how often it appears)
-    vobs_one = numpy.zeros(int(max_pattern[0:pattern_length:], 2) + 1)
-    vobs_two = numpy.zeros(int(max_pattern[0:pattern_length + 1:], 2) + 1)
+    vobs_one = zeros(int(max_pattern[0:pattern_length:], 2) + 1)
+    vobs_two = zeros(int(max_pattern[0:pattern_length + 1:], 2) + 1)
 
-    for i in range(n):
+    for i in trange(n):
         # Work out what pattern is observed
         vobs_one[int(bin_data[i:i + pattern_length:], 2)] += 1
         vobs_two[int(bin_data[i:i + pattern_length + 1:], 2)] += 1
 
     # Calculate the test statistics and p values
     vobs = [vobs_one, vobs_two]
-    sums = numpy.zeros(2)
+    sums = zeros(2)
     for i in range(2):
         for j in range(len(vobs[i])):
             if vobs[i][j] > 0:
-                sums[i] += vobs[i][j] * math.log(vobs[i][j] / n)
+                sums[i] += vobs[i][j] * log(vobs[i][j] / n)
     sums /= n
     ape = sums[0] - sums[1]
-    chi_squared = 2.0 * n * (math.log(2) - ape)
+    chi_squared = 2.0 * n * (log(2) - ape)
     result = spc.gammaincc(pow(2, pattern_length - 1), chi_squared / 2.0)
     if result >= 0.01:
         return f'------------ \nApproximate Entropy Test \nSuccess P-value = {str(result)} \n------------'

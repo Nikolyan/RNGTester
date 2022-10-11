@@ -1,7 +1,5 @@
-import math
 from tqdm import trange, tqdm
-import scipy.special as spc
-import numpy
+from numpy import zeros, max, floor, sqrt, array, abs, sum
 import scipy.stats as sst
 
 def cumulative_sums(bin_data: str, method="forward"):
@@ -19,7 +17,7 @@ def cumulative_sums(bin_data: str, method="forward"):
     :return: the P-value
     """
     n = len(bin_data)
-    counts = numpy.zeros(n)
+    counts = zeros(n)
     # Calculate the statistic using a walk forward
     if method != "forward":
         bin_data = bin_data[::-1]
@@ -36,24 +34,24 @@ def cumulative_sums(bin_data: str, method="forward"):
         ix += 1
 
     # This is the maximum absolute level obtained by the sequence
-    abs_max = numpy.max(numpy.abs(counts))
+    abs_max = max(abs(counts))
 
-    start = int(numpy.floor(0.25 * numpy.floor(-n / abs_max) + 1))
-    end = int(numpy.floor(0.25 * numpy.floor(n / abs_max) - 1))
+    start = int(floor(0.25 * floor(-n / abs_max) + 1))
+    end = int(floor(0.25 * floor(n / abs_max) - 1))
     terms_one = []
     for k in trange(start, end + 1):
-        sub = sst.norm.cdf((4 * k - 1) * abs_max / numpy.sqrt(n))
-        terms_one.append(sst.norm.cdf((4 * k + 1) * abs_max / numpy.sqrt(n)) - sub)
+        sub = sst.norm.cdf((4 * k - 1) * abs_max / sqrt(n))
+        terms_one.append(sst.norm.cdf((4 * k + 1) * abs_max / sqrt(n)) - sub)
 
-    start = int(numpy.floor(0.25 * numpy.floor(-n / abs_max - 3)))
-    end = int(numpy.floor(0.25 * numpy.floor(n / abs_max) - 1))
+    start = int(floor(0.25 * floor(-n / abs_max - 3)))
+    end = int(floor(0.25 * floor(n / abs_max) - 1))
     terms_two = []
     for k in trange(start, end + 1):
-        sub = sst.norm.cdf((4 * k + 1) * abs_max / numpy.sqrt(n))
-        terms_two.append(sst.norm.cdf((4 * k + 3) * abs_max / numpy.sqrt(n)) - sub)
+        sub = sst.norm.cdf((4 * k + 1) * abs_max / sqrt(n))
+        terms_two.append(sst.norm.cdf((4 * k + 3) * abs_max / sqrt(n)) - sub)
 
-    result = 1.0 - numpy.sum(numpy.array(terms_one))
-    result += numpy.sum(numpy.array(terms_two))
+    result = 1.0 - sum(array(terms_one))
+    result += sum(array(terms_two))
     if result >= 0.01:
         return f'------------ \nCumulative Sums Test \nSuccess P-value = {str(result)} \n------------'
     else:

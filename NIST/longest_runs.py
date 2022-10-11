@@ -1,11 +1,11 @@
-import math
-import copy
-from tqdm import trange, tqdm
+from math import floor
+from copy import deepcopy
+from numpy import zeros
+from tqdm import trange
 import scipy.special as spc
-import numpy
 
 def longest_runs(array):
-    bin_data = copy.deepcopy(array)
+    bin_data = deepcopy(array)
 
     if len(bin_data) < 128:
         print("\t", "Not enough data to run test!")
@@ -25,8 +25,8 @@ def longest_runs(array):
 
     # Work out the number of blocks, discard the remainder
     # pik = [0.2148, 0.3672, 0.2305, 0.1875]
-    num_blocks = math.floor(len(bin_data) / m)
-    frequencies = numpy.zeros(k + 1)
+    num_blocks = floor(len(bin_data) / m)
+    frequencies = zeros(k + 1)
     block_start, block_end = 0, m
     for i in trange(num_blocks):
         # Slice the binary string into a block

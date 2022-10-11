@@ -1,13 +1,13 @@
-import math
-import copy
-from tqdm import trange, tqdm
-import scipy.special as spc
+from math import erfc
+from copy import deepcopy
+from tqdm import trange
 
 def runs(array: list):
 
-    new_array = copy.deepcopy(array)
+    new_array = deepcopy(array)
     n = len(new_array)
     pi = sum(new_array) / n
+
     obs_array = []
     for j in trange(0, n - 1):
         if new_array[j] == new_array[j + 1]:
@@ -16,7 +16,7 @@ def runs(array: list):
             obs_array.append(1)
     obs = sum(obs_array) + 1
 
-    result = math.erfc(abs(obs - 2 * n * pi * (1 - pi)) / (2 * (2 * n) ** (1 / 2) * pi * (1 - pi)))
+    result = erfc(abs(obs - 2 * n * pi * (1 - pi)) / (2 * (2 * n) ** (1 / 2) * pi * (1 - pi)))
 
     if result >= 0.01:
         return f'------------ \nRuns Test \nSuccess P-value = {str(result)} \n------------'

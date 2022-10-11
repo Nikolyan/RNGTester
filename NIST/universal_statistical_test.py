@@ -1,7 +1,6 @@
-from math import floor, log, sqrt
-from tqdm import trange, tqdm
-import scipy.special as spc
+from math import floor, log, erfc, sqrt
 from numpy import zeros
+from tqdm import trange
 
 def universal_statistical_test(binary_data: str):
     """
@@ -17,6 +16,7 @@ def universal_statistical_test(binary_data: str):
     :return:    (p_value, bool) A tuple which contain the p_value and result of frequency_test(True or False)
     """
     length_of_binary_data = len(binary_data)
+
     pattern_size = 5
     if length_of_binary_data >= 387840:
         pattern_size = 6
@@ -40,6 +40,7 @@ def universal_statistical_test(binary_data: str):
         pattern_size = 15
     if length_of_binary_data >= 1059061760:
         pattern_size = 16
+
 
     if 5 < pattern_size < 16:
         # Create the biggest binary string of length pattern_size

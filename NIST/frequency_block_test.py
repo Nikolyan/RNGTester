@@ -1,14 +1,14 @@
-import math
-import copy
+from math import floor
+from copy import deepcopy
 from tqdm import tqdm
 import scipy.special as spc
 
 def frequency_block_test(array: list, m: int):
     n = len(array)
-    N = math.floor(n / m)
+    N = floor(n / m)
     buf_array = []
     x2 = 0
-    new_array = copy.deepcopy(array)
+    new_array = deepcopy(array)
     for i in tqdm(range(0, m * N, m)):
         for j in range(i, i + m):
             buf_array.append(new_array[j])

@@ -1,8 +1,8 @@
-import math
-from tqdm import trange, tqdm
+from math import log
+from tqdm import tqdm
 import scipy.special as spc
-import numpy.fft as sff
-import numpy
+from scipy import fft
+from numpy import abs, where, sqrt
 
 def spectral_test(bin_data: str):
     """
@@ -23,18 +23,20 @@ def spectral_test(bin_data: str):
         elif char == '1':
             plus_minus_one.append(1)
     # Product discrete fourier transform of plus minus one
-    s = sff.fft(plus_minus_one)
+    s = fft.fft(plus_minus_one)
     #print(s)
-    modulus = numpy.abs(s[0: int(n / 2)])
+    modulus = abs(s[0: int(n / 2)])
     #print(modulus)
-    tau = numpy.sqrt(math.log(1 / 0.05) * n)
+    tau = sqrt(log(1 / 0.05) * n)
     # Theoretical number of peaks
     count_n0 = 0.95 * (n / 2)
     # Count the number of actual peaks m > T
-    count_n1 = len(numpy.where(modulus < tau)[0])
+    count_n1 = len(where((modulus[0:len(modulus)] < tau) & (modulus[0:len(modulus)] > 0))[0])
+
     # Calculate d and return the p value statistic
-    d = (count_n1 - count_n0) / (numpy.sqrt((n * 0.95 * 0.05) / 4))
-    result = spc.erfc(abs(d) / numpy.sqrt(2))
+    d = (count_n1 - count_n0) / (sqrt((n * 0.95 * 0.05) / 4))
+
+    result = spc.erfc(abs(d) / sqrt(2))
     if result >= 0.01:
         return f'------------ \nSpectral Test \nSuccess P-value = {str(result)} \n------------'
     else:
