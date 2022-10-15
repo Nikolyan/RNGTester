@@ -4,9 +4,9 @@ from math import sqrt
 from tqdm import tqdm, trange
 import numpy as np
 
-path = r"C:\Users\Илья\Desktop\не трогать\dt.bin"
+path = r"/home/ilya/Downloads/Telegram Desktop/dt.bin"
 alpha_const = 0.005
-ar = creat_array(path, 1000)
+ar = creat_array(path, 10000)
 
 
 def func1(bin_data: list, alpha=alpha_const):
@@ -22,20 +22,29 @@ def func1(bin_data: list, alpha=alpha_const):
         return f'------------ \nПроверка соответствия частот знаков \nUnsuccess T-stat = {T_stat}\n------------'
 
 
-def func2(k_max: int, bin_data: list, alpha=alpha_const):
-    for k in range(1, k_max + 1):
+def func2(bin_data: list, alpha=alpha_const):
+
+    for k in range(1, 25):
         u_0 = 0
         u_1 = 0
         i_arr = gen_i(k)
         v_i_0 = []
         v_i_1 = []
         v_i = []
+        flag = True
         for i in trange(len(i_arr)):
             v_i_0.append(func2_v_ind(bin_data, i_arr[i], k, 0))
             v_i_1.append(func2_v_ind(bin_data, i_arr[i], k, 1))
             v_i.append(v_i_0[i] + v_i_1[i])
             u_0 += v_i_0[i]
             u_1 += v_i_1[i]
+            if v_i_0[i] < 20 or v_i_1[i] < 20:
+                flag = False
+                break
+        if not flag:
+            print('Конец')
+            break
+
         t = 0
         for i in range(len(i_arr)):
             t += ((len(bin_data) * v_i_0[i] - v_i[i] * u_0) ** 2) / (v_i[i] * u_0)
@@ -145,5 +154,5 @@ def func4(bin_data: list, alpha=alpha_const):
 
 
 
-
+func2(ar)
 
