@@ -3,7 +3,7 @@ from NIST import *
 
 
 
-ar = creat_array('dt.bin', 0)
+ar = creat_array(r'C:\Users\nikol\Desktop\Pet-projects\dt.bin', 0)
 print(frequency_monobit_test(ar))
 print(frequency_block_test(ar, 128))
 print(runs(ar))

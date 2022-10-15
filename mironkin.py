@@ -1,10 +1,14 @@
+import scipy
+
 from creat_array import creat_array
 from scipy.stats import chi2
 from math import sqrt
 from tqdm import tqdm, trange
 import numpy as np
 
-path = r"/home/ilya/Downloads/Telegram Desktop/dt.bin"
+from multiprocessing import Pool,Process
+
+path = r'C:\Users\nikol\Desktop\Pet-projects\dt.bin'
 alpha_const = 0.005
 ar = creat_array(path, 10000)
 
@@ -22,7 +26,7 @@ def func1(bin_data: list, alpha=alpha_const):
         return f'------------ \nПроверка соответствия частот знаков \nUnsuccess T-stat = {T_stat}\n------------'
 
 
-def func2(bin_data: list, alpha=alpha_const):
+def func2(bin_data=ar, alpha=alpha_const):
 
     for k in range(1, 25):
         u_0 = 0
@@ -130,7 +134,7 @@ def func4(bin_data: list, alpha=alpha_const):
         v_i = []
         for i in range(2**k):
             summ = 0
-            for j in range(len(bin_data)//k+1):
+            for j in range(1, len(bin_data)//k):
                 summ_int = 0
                 for z in range((j-1)*k, j*k):
                     summ_int += 2**(z-(j-1)*k) * bin_data[z]
@@ -149,10 +153,3 @@ def func4(bin_data: list, alpha=alpha_const):
         else:
             print(
                 f'------------ \nПроверка согласия распределения числа  \nSuccess p_value = {p_value}, k = {k}\n------------')
-
-
-
-
-
-func2(ar)
-
