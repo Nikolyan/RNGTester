@@ -1,3 +1,5 @@
+import time
+
 import scipy
 
 from creat_array import creat_array
@@ -6,11 +8,9 @@ from math import sqrt
 from tqdm import tqdm, trange
 import numpy as np
 
-from multiprocessing import Pool,Process
-
 path = r'C:\Users\nikol\Desktop\Pet-projects\dt.bin'
 alpha_const = 0.005
-ar = creat_array(path, 10000)
+ar = creat_array(path, 10000000)
 
 
 def func1(bin_data: list, alpha=alpha_const):
@@ -153,3 +153,7 @@ def func4(bin_data: list, alpha=alpha_const):
         else:
             print(
                 f'------------ \nПроверка согласия распределения числа  \nSuccess p_value = {p_value}, k = {k}\n------------')
+
+s = time.time()
+print(func3(ar, 0.005))
+print(time.time() - s)
