@@ -1,12 +1,20 @@
 from math import floor
-from copy import deepcopy
 from numpy import zeros
-from tqdm import trange
 import scipy.special as spc
 
-def longest_runs(array):
-    bin_data = deepcopy(array)
 
+def longest_runs(bin_data: list, path: str):
+    """
+    Note that this description is taken from the NIST documentation [1]
+    [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
+    The focus of the tests is the longest run of ones within M-bit blocks. The purpose of this tests is to determine
+    whether the length of the longest run of ones within the tested sequences is consistent with the length of the
+    longest run of ones that would be expected in a random sequence. Note that an irregularity in the expected
+    length of the longest run of ones implies that there is also an irregularity ub tge expected length of the long
+    est run of zeroes. Therefore, only one test is necessary for this statistical tests of randomness
+    :param bin_data: a binary string
+    :return: the p-value from the test
+    """
     if len(bin_data) < 128:
         print("\t", "Not enough data to run test!")
         return -1.0
@@ -28,13 +36,13 @@ def longest_runs(array):
     num_blocks = floor(len(bin_data) / m)
     frequencies = zeros(k + 1)
     block_start, block_end = 0, m
-    for i in trange(num_blocks):
+    for i in range(num_blocks):
         # Slice the binary string into a block
         block_data = bin_data[block_start:block_end]
         # Keep track of the number of ones
         max_run_count, run_count = 0, 0
         for j in range(0, m):
-            if block_data[j] == '1':
+            if block_data[j] == 1:
                 run_count += 1
                 max_run_count = max(max_run_count, run_count)
             else:
@@ -50,12 +58,17 @@ def longest_runs(array):
             frequencies[k] += 1
         block_start += m
         block_end += m
+    # print(frequencies)
     chi_squared = 0
     for i in range(len(frequencies)):
         chi_squared += (pow(frequencies[i] - (num_blocks * pik_values[i]), 2.0)) / (num_blocks * pik_values[i])
-    result = spc.gammaincc(float(k / 2), float(chi_squared / 2))
+    p_val = spc.gammaincc(float(k / 2), float(chi_squared / 2))
 
-    if result >= 0.01:
-        return f'------------ \nLongest Runs Test \nSuccess P-value = {str(result)} \n------------'
+    if p_val >= 0.01:
+        open(path, 'a').write(
+            f'------------\nLongest Runs Test\nSuccess P-value = {str(p_val)}\n------------\n')
     else:
-        return f'------------ \nLongest Runs Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nLongest Runs Test\nUnsuccess P-value = {str(p_val)}\n------------\n')
+
+    return 0

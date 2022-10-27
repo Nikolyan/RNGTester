@@ -2,7 +2,7 @@ from scipy.stats import chi2
 from numba import njit, prange
 
 
-@njit(fastmath=True, nopython=True, parallel=True)
+@njit(fastmath=True, nopython=True)
 def gen_i(n):
     res = []
     for i in prange(2 ** n):

@@ -2,22 +2,22 @@ from scipy.stats import chi2
 from numba import njit, prange
 
 
-@njit(fastmath=True, nopython=True, parallel=True)
+#@njit(fastmath=True, nopython=True, parallel=True)
 def tk(k, array, l):
     t_k = 0
     for i in prange(2 ** k):
         t_k += ((2 ** k * array[i] - l // k) ** 2) / ((2 ** k) * (l // k))
     return t_k
 
-@njit(fastmath=True, nopython=True, parallel=True)
+#@njit(fastmath=True, nopython=True, parallel=True)
 def solve_distribution_consistency_check(bin_data: list):
     k_list = []
     v_i_new = []
     t_k_new = []
-    for k in prange(2, 17):
+    for k in prange(2, 17 ):
 
         v_i = []
-        for i in range(2**k):
+        for i in prange(2**k):
             summ = 0
             for j in prange(1, len(bin_data)//k):
                 summ_int = 0

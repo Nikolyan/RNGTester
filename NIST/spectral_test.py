@@ -4,7 +4,8 @@ import scipy.special as spc
 from scipy import fft
 from numpy import abs, where, sqrt
 
-def spectral_test(bin_data: str):
+
+def spectral_test(bin_data: list, path: str):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -18,9 +19,9 @@ def spectral_test(bin_data: str):
     n = len(bin_data)
     plus_minus_one = []
     for char in tqdm(bin_data):
-        if char == '0':
+        if char == 0:
             plus_minus_one.append(-1)
-        elif char == '1':
+        elif char == 1:
             plus_minus_one.append(1)
     # Product discrete fourier transform of plus minus one
     s = fft.fft(plus_minus_one)
@@ -38,6 +39,10 @@ def spectral_test(bin_data: str):
 
     result = spc.erfc(abs(d) / sqrt(2))
     if result >= 0.01:
-        return f'------------ \nSpectral Test \nSuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nSpectral Test\nSuccess P-value = {str(result)}\n------------\n')
     else:
-        return f'------------ \nSpectral Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nSpectral Test\nUnsuccess P-value = {str(result)}\n------------\n')
+
+    return 0

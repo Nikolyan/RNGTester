@@ -3,7 +3,8 @@ import scipy.special as spc
 from NIST.berlekamp_massey_algorithm import berlekamp_massey_algorithm
 from numpy import histogram
 
-def linear_complexity(bin_data, block_size=500):
+
+def linear_complexity(bin_data: list, path: str, block_size=500):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -48,8 +49,12 @@ def linear_complexity(bin_data, block_size=500):
         result = spc.gammaincc(dof / 2.0, chi_squared / 2.0)
 
         if result >= 0.01:
-            return f'------------ \nLinear Complexity Test \nSuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nLinear Complexity Test\nSuccess P-value = {str(result)}\n------------\n')
         else:
-            return f'------------ \nLinear Complexity Test \nUnsuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nLinear Complexity Test\nUnsuccess P-value = {str(result)}\n------------\n')
+        return 0
+
     else:
         return 'Error'

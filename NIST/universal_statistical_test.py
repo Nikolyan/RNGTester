@@ -2,7 +2,7 @@ from math import floor, log, erfc, sqrt
 from numpy import zeros
 from tqdm import trange
 
-def universal_statistical_test(binary_data: str):
+def universal_statistical_test(bin_data: str, path: str):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -15,7 +15,7 @@ def universal_statistical_test(binary_data: str):
     :param      verbose         True to display the debug messgae, False to turn off debug message
     :return:    (p_value, bool) A tuple which contain the p_value and result of frequency_test(True or False)
     """
-    length_of_binary_data = len(binary_data)
+    length_of_binary_data = len(bin_data)
 
     pattern_size = 5
     if length_of_binary_data >= 387840:
@@ -74,7 +74,7 @@ def universal_statistical_test(binary_data: str):
         for i in trange(num_blocks):
             block_start = i * pattern_size
             block_end = block_start + pattern_size
-            block_data = binary_data[block_start: block_end]
+            block_data = bin_data[block_start: block_end]
             # Work out what state we are in
             int_rep = int(block_data, 2)
 
@@ -94,8 +94,13 @@ def universal_statistical_test(binary_data: str):
         result = erfc(stat)
 
         if result >= 0.01:
-            return f'------------ \nUniversal Statistical Test \nSuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nUniversal Statistical Test\nSuccess P-value = {str(result)}\n------------\n')
         else:
-            return f'------------ \nUniversal Statistical Test \nUnsuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nUniversal Statistical Test\nUnsuccess P-value = {str(result)}\n------------\n')
+
+        return 0
+
     else:
         return 'Error'

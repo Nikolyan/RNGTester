@@ -3,7 +3,7 @@ from numpy import zeros
 from tqdm import trange
 from NIST.BinaryMatrix import BinaryMatrix
 
-def matrix_rank(bin_data: str, q=32):
+def matrix_rank(bin_data: list, path: str, q=32):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -13,8 +13,6 @@ def matrix_rank(bin_data: str, q=32):
     :param bin_data: a binary string
     :return: the p-value from the test
     """
-
-
     shape = (q, q)
     n = len(bin_data)
     block_size = int(q * q)
@@ -28,7 +26,7 @@ def matrix_rank(bin_data: str, q=32):
             block_data = bin_data[block_start:block_end]
             block = zeros(len(block_data))
             for i in range(len(block_data)):
-                if block_data[i] == '1':
+                if block_data[i] == 1:
                     block[i] = 1.0
             m = block.reshape(shape)
             ranker = BinaryMatrix(m, q, q)
@@ -55,8 +53,12 @@ def matrix_rank(bin_data: str, q=32):
             chi += pow((max_ranks[i] - piks[i] * num_m), 2.0) / (piks[i] * num_m)
         result = exp(-chi / 2)
         if result >= 0.01:
-            return f'------------ \nMatrix Rank Test \nSuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nMatrix Rank Test\nSuccess P-value = {str(result)}\n------------\n')
         else:
-            return f'------------ \nMatrix Rank Test \nUnsuccess P-value = {str(result)} \n------------'
+            open(path, 'a').write(
+                f'------------\nMatrix Rank Test\nUnsuccess P-value = {str(result)}\n------------\n')
+        return 0
+
     else:
         return 'Error'

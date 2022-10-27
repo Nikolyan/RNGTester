@@ -16,7 +16,7 @@ def get_pik_value(k, x):
     return out
 
 
-def random_excursions(bin_data):
+def random_excursions(bin_data: list, path: str):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -33,7 +33,7 @@ def random_excursions(bin_data):
     # Turn all the binary digits into +1 or -1
     int_data = zeros(len(bin_data))
     for i in trange(len(bin_data)):
-        if bin_data[i] == '0':
+        if bin_data[i] == 0:
             int_data[i] = -1.0
         else:
             int_data[i] = 1.0
@@ -60,7 +60,7 @@ def random_excursions(bin_data):
     for cycle in cycles:
         # Determine the number of times each cycle visits each state
         state_count.append(([len(where(cycle == state)[0]) for state in x_values]))
-    state_count = numpy.transpose(numpy.clip(state_count, 0, 5))
+    state_count = transpose(clip(state_count, 0, 5))
 
     su = []
     for cycle in range(6):
@@ -71,7 +71,12 @@ def random_excursions(bin_data):
     inner_term = num_cycles * array(piks)
     chi = sum(1.0 * (array(su) - inner_term) ** 2 / inner_term, axis=1)
     result = ([spc.gammaincc(2.5, cs / 2.0) for cs in chi])
+
     if result >= 0.01:
-        return f'------------ \nRandom Excursions Test \nSuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nRandom Excursions Test\nSuccess P-value = {str(result)}\n------------\n')
     else:
-        return f'------------ \nRandom Excursions Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nRandom Excursions Test\nUnsuccess P-value = {str(result)}\n------------\n')
+
+    return 0

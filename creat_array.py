@@ -42,6 +42,7 @@ def from_bin_file(file: str, size: int):  # creating an array from a binary file
         return array
     else:
         array = []  # output array
+
         with open(file, "rb") as f:
             for i in trange(1, size + 1):
                 byte = BitArray(f.read(1)).bin  # converting hexadecimal to binary

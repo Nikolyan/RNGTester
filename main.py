@@ -3,26 +3,25 @@ from NIST import *
 from Methods import *
 import time
 
+path = r'C:\Users\nikol\Desktop\Pet-projects\RNGTester\nist.txt'
+m = r'C:\Users\nikol\Desktop\Pet-projects\RNGTester\results.txt'
 
-ar = creat_array(r'dt.bin', 0)
-independence_of_signs(ar, 'result.txt', 0.005)
-distribution_consistency_check(ar, 'result.txt', 0.005)
+bin = creat_array(r'C:\Users\nikol\Desktop\Pet-projects\dt.bin', 0)
 
-# print(frequency_monobit_test(ar))
-# print(frequency_block_test(ar, 128))
-# print(runs(ar))
-# print(longest_runs(ar))
-#
-#
-# string = ''.join([str(x) for x in ar])
-#
-# print(matrix_rank(string))
-# print(spectral_test(string))
-# print(non_overlapping_template_test(string))
-# print(overlapping_template(string))
-# print(universal_statistical_test(string))
-# print(linear_complexity(string))
-# print(serial(string))
-# print(approximate_entropy(string))
-# print(cumulative_sums(string))
-# print(random_excursions_variant(string))
+independence_of_signs(bin, m)
+
+# string = ''.join([str(x) for x in bin])
+# print(frequency_monobit_test(bin, path))
+# print(frequency_block_test(bin, path, 128))
+# print(runs(bin, path))
+# print(longest_runs(bin, path))
+# print(matrix_rank(bin, path))
+# print(spectral_test(bin, path))
+# print(non_overlapping_template_test(bin, path))
+# print(overlapping_template(bin, path))
+# print(universal_statistical_test(string, path))
+# print(linear_complexity(bin, path))
+# print(serial(string, path))
+# print(approximate_entropy(string, path))
+# print(cumulative_sums(bin, path))
+# print(random_excursions_variant(bin, path))

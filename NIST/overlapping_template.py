@@ -10,7 +10,7 @@ def get_prob(u, x):
     return out
 
 
-def overlapping_template(bin_data: str, template_size=9, block_size=1032):
+def overlapping_template(bin_data: list, path: str, pattern_size=9, block_size=1032):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -24,11 +24,11 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
     :return: the p-value from the test
     """
     n = len(bin_data)
-    pattern = ""
-    for i in range(template_size):
-        pattern += "1"
+    pattern = []
+    for i in range(pattern_size):
+        pattern.append(1)
     num_blocks = floor(n / block_size)
-    lambda_val = float(block_size - template_size + 1) / pow(2, template_size)
+    lambda_val = float(block_size - pattern_size + 1) / pow(2, pattern_size)
     eta = lambda_val / 2.0
     piks = [get_prob(i, eta) for i in range(5)]
     diff = float(array(piks).sum())
@@ -43,7 +43,7 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
         pattern_count = 0
         j = 0
         while j < block_size:
-            sub_block = block_data[j:j + template_size]
+            sub_block = block_data[j:j + pattern_size]
             if sub_block == pattern:
                 pattern_count += 1
             j += 1
@@ -57,7 +57,12 @@ def overlapping_template(bin_data: str, template_size=9, block_size=1032):
     for i in trange(len(pattern_counts)):
         chi_squared += pow(pattern_counts[i] - num_blocks * piks[i], 2.0) / (num_blocks * piks[i])
     result = spc.gammaincc(5.0 / 2.0, chi_squared / 2.0)
+
     if result >= 0.01:
-        return f'------------ \nOverlapping Patterns Test \nSuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nOverlapping Patterns Test\nSuccess P-value = {str(result)}\n------------\n')
     else:
-        return f'------------ \nOverlapping Patterns Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------ \nOverlapping Patterns Test\nUnsuccess P-value = {str(result)}\n------------\n')
+
+    return 0

@@ -13,7 +13,7 @@ def get_frequency(list_data, trigger):
     return frequency
 
 
-def random_excursions_variant(bin_data):
+def random_excursions_variant(bin_data: list, path: str):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -26,7 +26,7 @@ def random_excursions_variant(bin_data):
     """
     int_data = zeros(len(bin_data))
     for i in trange(len(bin_data)):
-        int_data[i] = int(bin_data[i])
+        int_data[i] = bin_data[i]
     sum_int = (2 * int_data) - ones(len(int_data))
     cumulative_sum = cumsum(sum_int)
 
@@ -42,8 +42,10 @@ def random_excursions_variant(bin_data):
             den = sqrt(2 * j * (4 * abs(xs) - 2))
             result = spc.erfc(abs(get_frequency(li_data, xs) - j) / den)
             if result >= 0.01:
-                print(
-                    f'------------ \nRandom Excursions Variant Test {xs} \nSuccess P-value = {str(result)} \n------------')
+                open(path, 'a').write(
+                    f'------------\nRandom Excursions Variant Test {xs}\nSuccess P-value = {str(result)}\n------------\n')
             else:
-                print(
-                    f'------------ \nRandom Excursions Variant Test {xs} \nUnsuccess P-value = {str(result)} \n------------')
+                open(path, 'a').write(
+                    f'------------\nRandom Excursions Variant Test {xs}\nUnsuccess P-value = {str(result)}\n------------\n')
+
+    return 0

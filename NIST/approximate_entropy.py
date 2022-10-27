@@ -3,7 +3,7 @@ from numpy import zeros
 from tqdm import trange
 from math import log
 
-def approximate_entropy(bin_data: str, pattern_length=10):
+def approximate_entropy(bin_data: str, path: str, pattern_length=10):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -45,6 +45,10 @@ def approximate_entropy(bin_data: str, pattern_length=10):
     chi_squared = 2.0 * n * (log(2) - ape)
     result = spc.gammaincc(pow(2, pattern_length - 1), chi_squared / 2.0)
     if result >= 0.01:
-        return f'------------ \nApproximate Entropy Test \nSuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nApproximate Entropy Test\nSuccess P-value = {str(result)}\n------------\n')
     else:
-        return f'------------ \nApproximate Entropy Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------ \nApproximate Entropy Test \nUnsuccess P-value = {str(result)} \n------------\n')
+
+    return 0

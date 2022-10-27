@@ -1,0 +1,124 @@
+------------
+Frequency Monobit Test
+Success P-value = 0.8576143681296432
+------------
+------------
+Frequency Block Test
+Success P-value = 1.0
+------------
+------------
+Runs Test
+Unsuccess P-value = 2.0015448015839685e-28
+------------
+------------
+Longest Runs Test
+Unsuccess P-value = 0.0
+------------
+------------
+Spectral Test
+Success P-value = 0.421503879170839
+------------
+------------
+Non Overlapping Template Test
+Unsuccess P-value = 2.805781186086366e-31
+------------
+------------ 
+Overlapping Patterns Test
+Unsuccess P-value = 1.25494257404715e-249
+------------
+------------
+Universal Statistical Test
+Success P-value = 0.4776569062070531
+------------
+------------
+Linear Complexity Test
+Success P-value = 0.6888250915208165
+------------
+------------ 
+Serial Test
+Unsuccess P-value = 0.0
+------------
+------------ 
+Approximate Entropy Test 
+Unsuccess P-value = 0.0 
+------------
+------------
+Cumulative Sums Test
+Success P-value = 1.0
+------------
+------------
+Random Excursions Variant Test -9
+Success P-value = 0.6301206175269618
+------------
+------------
+Random Excursions Variant Test -8
+Success P-value = 0.4672744359290707
+------------
+------------
+Random Excursions Variant Test -7
+Success P-value = 0.20682946934193003
+------------
+------------
+Random Excursions Variant Test -6
+Success P-value = 0.11995430605092378
+------------
+------------
+Random Excursions Variant Test -5
+Success P-value = 0.28962753551413745
+------------
+------------
+Random Excursions Variant Test -4
+Success P-value = 0.8084284813723743
+------------
+------------
+Random Excursions Variant Test -3
+Success P-value = 0.5508288953971154
+------------
+------------
+Random Excursions Variant Test -2
+Success P-value = 0.4696350706621064
+------------
+------------
+Random Excursions Variant Test -1
+Success P-value = 0.17729550709544473
+------------
+------------
+Random Excursions Variant Test 1
+Unsuccess P-value = 0.008614552906817658
+------------
+------------
+Random Excursions Variant Test 2
+Success P-value = 0.12422846873302251
+------------
+------------
+Random Excursions Variant Test 3
+Success P-value = 0.6068646253991822
+------------
+------------
+Random Excursions Variant Test 4
+Success P-value = 0.8534433453787081
+------------
+------------
+Random Excursions Variant Test 5
+Success P-value = 0.6775787954080902
+------------
+------------
+Random Excursions Variant Test 6
+Success P-value = 0.4916514157159668
+------------
+------------
+Random Excursions Variant Test 7
+Success P-value = 0.47493408404255066
+------------
+------------
+Random Excursions Variant Test 8
+Success P-value = 0.6923515987230764
+------------
+------------
+Random Excursions Variant Test 9
+Success P-value = 0.9527381990114117
+------------
+------------
+Matrix Rank Test
+Success P-value = 0.2630822036880417
+------------

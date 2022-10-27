@@ -2,7 +2,7 @@ from tqdm import trange, tqdm
 from numpy import zeros, max, floor, sqrt, array, abs, sum
 import scipy.stats as sst
 
-def cumulative_sums(bin_data: str, method="forward"):
+def cumulative_sums(bin_data: str, path: str, method="forward"):
     """
     Note that this description is taken from the NIST documentation [1]
     [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
@@ -53,6 +53,10 @@ def cumulative_sums(bin_data: str, method="forward"):
     result = 1.0 - sum(array(terms_one))
     result += sum(array(terms_two))
     if result >= 0.01:
-        return f'------------ \nCumulative Sums Test \nSuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nCumulative Sums Test\nSuccess P-value = {str(result)}\n------------\n')
     else:
-        return f'------------ \nCumulative Sums Test \nUnsuccess P-value = {str(result)} \n------------'
+        open(path, 'a').write(
+            f'------------\nCumulative Sums Test\nUnsuccess P-value = {str(result)}\n------------\n')
+
+    return 0

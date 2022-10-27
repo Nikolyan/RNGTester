@@ -153,7 +153,3 @@ def func4(bin_data: list, alpha=alpha_const):
         else:
             print(
                 f'------------ \nПроверка согласия распределения числа  \nSuccess p_value = {p_value}, k = {k}\n------------')
-
-s = time.time()
-print(func3(ar, 0.005))
-print(time.time() - s)
