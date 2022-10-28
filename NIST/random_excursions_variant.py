@@ -2,10 +2,7 @@ from tqdm import trange
 import scipy.special as spc
 from numpy import zeros, ones, cumsum, abs, where, sqrt
 
-def get_frequency(list_data, trigger):
-    """
-    This method is used by the random_excursions_variant method to get frequencies
-    """
+def frequency_fun(list_data, trigger):
     frequency = 0
     for (x, y) in list_data:
         if x == trigger:
@@ -14,38 +11,25 @@ def get_frequency(list_data, trigger):
 
 
 def random_excursions_variant(bin_data: list, path: str):
-    """
-    Note that this description is taken from the NIST documentation [1]
-    [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
-    The focus of this test is the total number of times that a particular state is visited (i.e., occurs) in a
-    cumulative sum random walk. The purpose of this test is to detect deviations from the expected number of visits
-    to various states in the random walk. This test is actually a series of eighteen tests (and conclusions), one
-    test and conclusion for each of the states: -9, -8, …, -1 and +1, +2, …, +9.
-    :param bin_data: a binary string
-    :return: the P-value
-    """
-    int_data = zeros(len(bin_data))
+    int_data_zeros = zeros(len(bin_data))
     for i in trange(len(bin_data)):
-        int_data[i] = bin_data[i]
-    sum_int = (2 * int_data) - ones(len(int_data))
-    cumulative_sum = cumsum(sum_int)
+        int_data_zeros[i] = bin_data[i]
+    cumul_sum = cumsum((2 * int_data_zeros) - ones(len(int_data_zeros)))
 
-    li_data = []
-    for xs in sorted(set(cumulative_sum)):
-        if abs(xs) <= 9:
-            li_data.append([xs, len(where(cumulative_sum == xs)[0])])
+    list_data = []
+    for j in sorted(set(cumul_sum)):
+        if abs(j) <= 9:
+            list_data.append([j, len(where(cumul_sum == j)[0])])
 
-    j = get_frequency(li_data, 0) + 1
-    result = []
-    for xs in range(-9, 9 + 1):
-        if not xs == 0:
-            den = sqrt(2 * j * (4 * abs(xs) - 2))
-            result = spc.erfc(abs(get_frequency(li_data, xs) - j) / den)
+    j = frequency_fun(list_data, 0) + 1
+    for j in range(-9, 9 + 1):
+        if not j == 0:
+            den = sqrt(2 * j * (4 * abs(j) - 2))
+            result = spc.erfc(abs(frequency_fun(list_data, j) - j) / den)
             if result >= 0.01:
                 open(path, 'a').write(
-                    f'------------\nRandom Excursions Variant Test {xs}\nSuccess P-value = {str(result)}\n------------\n')
+                    f'------------\nRandom Excursions Variant Test {j}\nSuccess P-value = {str(result)}\n------------\n')
             else:
                 open(path, 'a').write(
-                    f'------------\nRandom Excursions Variant Test {xs}\nUnsuccess P-value = {str(result)}\n------------\n')
-
+                    f'------------\nRandom Excursions Variant Test {j}\nUnsuccess P-value = {str(result)}\n------------\n')
     return 0

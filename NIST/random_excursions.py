@@ -3,10 +3,7 @@ import scipy.special as spc
 from numpy import zeros, cumsum, abs, append, array, where, transpose, sum, clip
 
 
-def get_pik_value(k, x):
-    """
-    This method is used by the random_excursions method to get expected probabilities
-    """
+def value_of_pik(k, x):
     if k == 0:
         out = 1 - 1.0 / (2 * abs(x))
     elif k >= 5:
@@ -17,66 +14,38 @@ def get_pik_value(k, x):
 
 
 def random_excursions(bin_data: list, path: str):
-    """
-    Note that this description is taken from the NIST documentation [1]
-    [1] http://csrc.nist.gov/publications/nistpubs/800-22-rev1a/SP800-22rev1a.pdf
-    The focus of this test is the number of cycles having exactly K visits in a cumulative sum random walk. The
-    cumulative sum random walk is derived from partial sums after the (0,1) sequence is transferred to the
-    appropriate (-1, +1) sequence. A cycle of a random walk consists of a sequence of steps of unit length taken at
-    random that begin at and return to the origin. The purpose of this test is to determine if the number of visits
-    to a particular state within a cycle deviates from what one would expect for a random sequence. This test is
-    actually a series of eight tests (and conclusions), one test and conclusion for each of the states:
-    States -> -4, -3, -2, -1 and +1, +2, +3, +4.
-    :param bin_data: a binary string
-    :return: the P-value
-    """
-    # Turn all the binary digits into +1 or -1
     int_data = zeros(len(bin_data))
     for i in trange(len(bin_data)):
         if bin_data[i] == 0:
             int_data[i] = -1.0
         else:
             int_data[i] = 1.0
-
-    # Calculate the cumulative sum
-    cumulative_sum = cumsum(int_data)
-    # Append a 0 to the end and beginning of the sum
-    cumulative_sum = append(cumulative_sum, [0])
-    cumulative_sum = append([0], cumulative_sum)
-
-    # These are the states we are going to look at
-    x_values = array([-4, -3, -2, -1, 1, 2, 3, 4])
-
-    # Identify all the locations where the cumulative sum revisits 0
-    position = where(cumulative_sum == 0)[0]
-    # For this identify all the cycles
-    cycles = []
+    cumul_sum = cumsum(int_data)
+    cumul_sum = append(cumul_sum, [0])
+    cumul_sum = append([0], cumul_sum)
+    values_of_x = array([-4, -3, -2, -1, 1, 2, 3, 4])
+    position = where(cumul_sum == 0)[0]
+    array_of_cycles = []
     for pos in range(len(position) - 1):
-        # Add this cycle to the list of cycles
-        cycles.append(cumulative_sum[position[pos]:position[pos + 1] + 1])
-    num_cycles = len(cycles)
-
-    state_count = []
-    for cycle in cycles:
-        # Determine the number of times each cycle visits each state
-        state_count.append(([len(where(cycle == state)[0]) for state in x_values]))
-    state_count = transpose(clip(state_count, 0, 5))
-
-    su = []
+        array_of_cycles.append(cumul_sum[position[pos]:position[pos + 1] + 1])
+    num_cycles = len(array_of_cycles)
+    counter = []
+    for cycle in array_of_cycles:
+        counter.append(([len(where(cycle == state)[0]) for state in values_of_x]))
+    counter = transpose(clip(counter, 0, 5))
+    s_1 = []
     for cycle in range(6):
-        su.append([(sct == cycle).sum() for sct in state_count])
-    su = transpose(su)
-
-    piks = ([([get_pik_value(uu, state) for uu in range(6)]) for state in x_values])
+        s_1.append([(sct == cycle).sum() for sct in counter])
+    s_1 = transpose(s_1)
+    piks = ([([value_of_pik(uu, state) for uu in range(6)]) for state in values_of_x])
     inner_term = num_cycles * array(piks)
-    chi = sum(1.0 * (array(su) - inner_term) ** 2 / inner_term, axis=1)
+    chi = sum(1.0 * (array(s_1) - inner_term) ** 2 / inner_term, axis=1)
     result = ([spc.gammaincc(2.5, cs / 2.0) for cs in chi])
-
-    if result >= 0.01:
-        open(path, 'a').write(
-            f'------------\nRandom Excursions Test\nSuccess P-value = {str(result)}\n------------\n')
-    else:
-        open(path, 'a').write(
-            f'------------\nRandom Excursions Test\nUnsuccess P-value = {str(result)}\n------------\n')
-
+    for i in range(len(values_of_x)):
+        if result[i] >= 0.01:
+            open(path, 'a').write(
+                f'------------\nRandom Excursions Test\nSuccess P-value = {str(result[i])}, State = {values_of_x[i]}\n------------\n')
+        else:
+            open(path, 'a').write(
+                f'------------\nRandom Excursions Test\nUnsuccess P-value = {str(result[i])}, State = {values_of_x[i]}\n------------\n')
     return 0

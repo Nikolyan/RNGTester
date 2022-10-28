@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="palich@95.165.31.225:1228 key" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="leoto@46.188.41.180:1681 (3)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
+      <paths name="leoto@46.188.41.180:1681 (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/leoto/Рабочий стол/pppp" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="leoto@46.188.41.180:1681 (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/leoto/Рабочий стол/pppp" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="palich@95.165.31.225:1228 key">
         <serverdata>
           <mappings>

@@ -3,10 +3,10 @@ from NIST import *
 from Methods import *
 import time
 
-path = r'C:\Users\nikol\Desktop\Pet-projects\RNGTester\nist.txt'
-m = r'C:\Users\nikol\Desktop\Pet-projects\RNGTester\results.txt'
+path = r'.\nist.txt'
+m = r'.\results.txt'
 
-bin = creat_array(r'C:\Users\nikol\Desktop\Pet-projects\dt.bin', 0)
+bin = creat_array(r'.\dt.bin', 0)
 
 independence_of_signs(bin, m)
 
@@ -18,7 +18,7 @@ independence_of_signs(bin, m)
 # print(matrix_rank(bin, path))
 # print(spectral_test(bin, path))
 # print(non_overlapping_template_test(bin, path))
-# print(overlapping_template(bin, path))
+# print(overlapping_template(bin, path))###???
 # print(universal_statistical_test(string, path))
 # print(linear_complexity(bin, path))
 # print(serial(string, path))

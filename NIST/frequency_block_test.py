@@ -13,7 +13,6 @@ def frequency_block_test(bin_data: list, path: str, m: int):
         a0 = sum(buf_array)
         x2 += ((a0 / m) - (1 / 2)) ** 2
         buf_array.clear()
-
     result = 1 - spc.gammainc((N / 2), ((x2 * 4 * m) / 2))
     if result >= 0.01:
         open(path, 'a').write(
@@ -21,5 +20,4 @@ def frequency_block_test(bin_data: list, path: str, m: int):
     else:
         open(path, 'a').write(
             f'------------ \nFrequency Block Test \nUnsuccess P-value = {str(result)} \n------------\n')
-
     return 0
